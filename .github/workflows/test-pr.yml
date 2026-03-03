@@ -18,16 +18,15 @@ env:
 
 jobs:
   pr-test-ubuntu:
-    name: Test (${{ matrix.os }})
+    name: "Test (${{ matrix.os }})"
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
-    matrix:
-      os:
-        - ubuntu-20.04
-        - ubuntu-22.04
-        - ubuntu-24.04
-        - ubuntu-latest
+      matrix:
+        os:
+          - ubuntu-22.04
+          - ubuntu-24.04
+          - ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -67,17 +66,18 @@ jobs:
 
   pr-test-freebsd:
     name: Test Schaufel on FreeBSD
-    runs-on: ubuntu-latest
+    runs-on: macos-12
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
 
       - name: Run FreeBSD test
         id: test
-        uses: vmactions/freebsd-vm@v1
+        uses: vmactions/freebsd-vm@v0
         with:
           usesh: true
           prepare: |
+            # install dependencies
             pkg install -y autotools librdkafka hiredis json-c postgresql14-client libconfig
           run: |
             autoreconf --force -i
